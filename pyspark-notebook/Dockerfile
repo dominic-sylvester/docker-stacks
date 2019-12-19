@@ -46,6 +46,7 @@ ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M -
 ENV USERPROFILE /home/$NB_USER
 
 
+
 ### Set the working directory to /powershell
 WORKDIR /powershell
 
@@ -70,6 +71,10 @@ RUN sudo add-apt-repository ppa:git-core/ppa -y && \
     sudo apt-get update && \
     sudo apt-get install git -y
 
+# Copy the Spark configuration file to the conf folder where Spark is installed
+# This includes for instance additional packages such as Delta Lake which will
+# be included in each SparkSession
+COPY spark-defaults.conf $SPARK_HOME/conf/
 
 # Switch from root/superuser to normal user and change directory
 WORKDIR /home/$NB_USER
